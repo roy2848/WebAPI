@@ -1,0 +1,77 @@
+﻿@model WebAPI.Models.Work
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#But").click(function () {
+            $.ajax({
+                url: "https://localhost:44327/Works/Get/" + $("#Select").val(),
+                type: "Get",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                dataType: "json",
+                success: function (response) {
+                    var trStr = "";
+                    console.log($("#next").val());
+                    console.log($("#OK").val());
+                    for (var k = 0; k < response.length; k++) {
+                        for (var i = 0; i < response[0].files.length; i++) {
+                            trStr += "<p>工單序號：" + response[k].files[i].fileSN +
+                                     "</p><p>工單號碼：" + response[k].files[i].fileOrder +
+                                     "</p><p>型號名稱：" + response[k].files[i].modelName + "</p><hr />";
+                        }
+                    }
+                    if (response.length == 0) {
+                        $("#datatable").text("無工件");
+                    }
+                    else $("#datatable").html(trStr);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#But2").click(function () {
+            var radioValue = $("input[name='next']:checked").val();
+            if (radioValue) {
+                $("#datatable2").text("你選擇" + radioValue);
+            }
+        });
+    });
+
+</script>
+<center>
+    <div>
+        <div>
+            <label>機台名稱：</label>
+            <select id="Select">
+                <option value="OP1">OP1</option>
+                <option value="OP2">OP2</option>
+                <option value="COOL">降溫</option>
+                <option value="CENTER">中心孔</option>
+                <option value="EQUIP">裝配</option>
+                <option value="CHECK">底檢</option>
+            </select>
+            <input id="But" type="button" value="確定" />
+        </div>
+        <hr />
+        <div id="datatable"></div>
+        <div>
+            <p>
+                <label><input type="radio" name="next" value="OK 前往下一站">OK</label>
+                <label><input type="radio" name="next" value="NG 送待判">NG</label>
+            </p>
+            <p><input id="But2" type="button" value="確定"></p>
+        </div>
+        <div id="datatable2"></div>
+    </div>
+</center>

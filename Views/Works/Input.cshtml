@@ -1,0 +1,41 @@
+﻿@model WebAPI.Models.Work
+
+@{
+    ViewData["Title"] = "Input";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#But").click(function () {
+            $.ajax({
+                url: "https://localhost:44327/Works/InputData",
+                type: "POST",
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                dataType: "json",
+                data: $("#Txt").val(),
+                success: function (response) {
+                    alert("ok");
+                    console.log(response);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        });
+    });
+</script>
+<center>
+    <h1>輸入Json格式資料</h1>
+    <div>
+        <div>
+            <textarea id="Txt" rows="20" cols="40"></textarea>
+        </div>
+        <div>
+            <input id="But" type="button" value="button" />
+        </div>
+    </div>
+</center>
